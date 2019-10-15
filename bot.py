@@ -1,8 +1,9 @@
 import telepot
-from learn import learnName, checkName
+from learn import learnName, checkName, learnPhrase, checkPhrase
 from tokenBot import returnToken
 
 bot = telepot.Bot(returnToken()) # Receives the Token of a function in token.py
+
 learningName = None
 
 def receivingMsg(msg):
@@ -27,21 +28,18 @@ def receivingMsg(msg):
             bot.sendPhoto(chatID, 'AgADAQADdagxGwfsuUVgQqWXa1HcFYACCzAABLbXnaNoCQQ-cr0EAAEC',caption="AiaiaiaiAiaiaiaiAiaiaiaiAiaiaiaiAiaiaiaiAiaiaiai")
             bot.sendAudio(chatID, 'CQADAQADYwADB-y5RadjBP5GTVpwAg')
 
-        #Answers
-        elif('oi' == text.lower()):
-            name = checkName(str(chatID))
-            if(name != None):
-                bot.sendMessage(chatID, "Olá " + name)
-            else:
-                bot.sendMessage(chatID, "Olá estranho")
-        
-        elif('beleza?' == text.lower()):
-            bot.sendMessage(chatID, "De boa na lagoa")
+        elif('/aprende' in text.lower()):
+            separator = text.find("=")
+            userPhrase = text[9:separator].lower()
+            botPhrase = text[separator+1:]
+            learnPhrase(userPhrase, botPhrase)
+            bot.sendMessage(chatID, "Aprendi a frase")
 
-        elif('seu nome' in text.lower()):
+        elif('/nome' in text.lower()):
             bot.sendMessage(chatID, "Sou Renan's, o bot que vai dominar o mundo, e o seu nome qual é?")
             learningName = True
 
+        #Answers
         elif(learningName != None):
             name = learnName(str(chatID),text)
             learningName = None
@@ -92,8 +90,14 @@ def receivingMsg(msg):
                 bot.sendMessage(chatID, x / y)
             except:
                 bot.sendMessage(chatID, "Me envie somente números")
+
+        #Check phrases
         else:
-            bot.sendMessage(chatID, "Tendi foi nada")
+            phrase = checkPhrase(text.lower())
+            if(phrase):
+                bot.sendMessage(chatID, phrase)
+            else:
+                bot.sendMessage(chatID, "Tendi foi nada")
 
     else:
         bot.sendMessage(chatID, "Ainda não fui programado para isso")
@@ -103,4 +107,7 @@ bot.message_loop(receivingMsg)
 
 print('Running...')
 while(True):
+    stop = input('Stop? ')
+    if(stop == 'y'):
+        break
     pass
