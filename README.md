@@ -4,6 +4,14 @@
    * Python 3.7
    * Telepot
 
+## For running:
+Need you create a file with the name `tokenBot.py` and this class inside:
+```
+def returnToken():
+    return "TOKEN"
+```
+Replace `TOKEN` with your token
+
 ## Release History
 * v1.0
   * Commands: /start /pillarmen
